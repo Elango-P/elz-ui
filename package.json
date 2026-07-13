@@ -1,13 +1,14 @@
 {
   "name": "elz-ui",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Elz UI — accessible React component library",
   "scripts": {
     "build": "pnpm -r --filter './packages/*' build",
     "test": "pnpm -r --filter './packages/*' test",
     "dev": "pnpm --filter @elz-ui/playground dev",
-    "typecheck": "pnpm -r --filter './packages/*' typecheck"
+    "typecheck": "pnpm -r --filter './packages/*' typecheck",
+    "publish:packages": "pnpm -r --filter './packages/*' publish --access public"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
