@@ -1,0 +1,223 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--elz-foreground);
+  font-family: var(--elz-font);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #d9efe9 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #e8edf6 0%, transparent 50%),
+    linear-gradient(180deg, #f7f8fb 0%, #eef1f6 100%);
+}
+
+.playground {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 5rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.playground__brand {
+  display: grid;
+  gap: 0.55rem;
+  animation: playground-rise 700ms var(--elz-ease) both;
+}
+
+.playground__logo {
+  font-family: var(--elz-font-display);
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  margin: 0;
+  line-height: 1;
+}
+
+.playground__tag {
+  margin: 0;
+  max-width: 34rem;
+  color: var(--elz-muted-foreground);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.overlay-stage {
+  display: grid;
+  gap: 1rem;
+  padding: 1.35rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(226, 230, 238, 0.9);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(18, 20, 26, 0.06);
+  animation: playground-rise 800ms var(--elz-ease) 80ms both;
+}
+
+.overlay-stage__title {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--elz-muted-foreground);
+}
+
+.overlay-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.elz-btn {
+  appearance: none;
+  font-family: var(--elz-font);
+  font-size: 0.9rem;
+  font-weight: 550;
+  border-radius: 999px;
+  border: 1px solid var(--elz-border);
+  background: #fff;
+  color: var(--elz-foreground);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  transition: transform 160ms var(--elz-ease), box-shadow 160ms var(--elz-ease), border-color 160ms ease,
+    background 160ms ease, color 160ms ease;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 8px 18px rgba(18, 20, 26, 0.04);
+}
+
+.elz-btn:hover {
+  transform: translateY(-1px);
+  border-color: #c9d1de;
+  box-shadow: 0 10px 24px rgba(18, 20, 26, 0.08);
+}
+
+.elz-btn:active {
+  transform: translateY(0);
+}
+
+.elz-btn--primary {
+  background: var(--elz-accent);
+  border-color: var(--elz-accent);
+  color: var(--elz-accent-foreground);
+  box-shadow: 0 10px 24px rgba(26, 107, 92, 0.25);
+}
+
+.elz-btn--primary:hover {
+  background: #15584c;
+  border-color: #15584c;
+}
+
+.elz-btn--ghost {
+  background: transparent;
+}
+
+.elz-btn--danger {
+  background: #fff5f5;
+  border-color: #f0c9c9;
+  color: var(--elz-danger);
+}
+
+.dialog-actions,
+.drawer-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.drawer-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.drawer-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--elz-radius);
+  background: var(--elz-muted);
+  font-size: 0.9rem;
+}
+
+.drawer-list strong {
+  font-weight: 600;
+}
+
+.drawer-list span {
+  color: var(--elz-muted-foreground);
+  font-size: 0.8rem;
+}
+
+.popover-card {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.popover-card h3 {
+  margin: 0;
+  font-family: var(--elz-font-display);
+  font-size: 1.05rem;
+  font-weight: 560;
+}
+
+.popover-card p {
+  margin: 0;
+  color: var(--elz-muted-foreground);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.menu-icon {
+  width: 1.05rem;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.section {
+  display: grid;
+  gap: 0.85rem;
+  animation: playground-rise 850ms var(--elz-ease) 140ms both;
+}
+
+.section h2 {
+  margin: 0;
+  font-family: var(--elz-font-display);
+  font-size: 1.25rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+}
+
+@keyframes playground-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .playground {
+    padding-top: 1.75rem;
+  }
+
+  .overlay-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

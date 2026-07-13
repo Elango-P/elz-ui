@@ -1,0 +1,268 @@
+import { useForm } from "react-hook-form";
+import { ElzProvider } from "@elz-ui/core";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@elz-ui/dialog";
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerClose,
+} from "@elz-ui/drawer";
+import { Popover, PopoverTrigger, PopoverContent } from "@elz-ui/popover";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@elz-ui/tooltip";
+import { ToastProvider, useToast } from "@elz-ui/toast";
+import { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } from "@elz-ui/menu";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@elz-ui/tabs";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@elz-ui/accordion";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@elz-ui/form";
+import "./playground.css";
+
+function ToastDemo() {
+  const { toast } = useToast();
+  return (
+    <button
+      className="elz-btn elz-btn--primary"
+      type="button"
+      onClick={() =>
+        toast({
+          title: "Changes published",
+          description: "Your workspace settings were saved successfully.",
+        })
+      }
+    >
+      Show toast
+    </button>
+  );
+}
+
+function FormDemo() {
+  const form = useForm<{ email: string }>({ defaultValues: { email: "" } });
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((v) => alert(JSON.stringify(v)))}
+        style={{ display: "grid", gap: "0.75rem", maxWidth: 360 }}
+      >
+        <FormField
+          control={form.control}
+          name="email"
+          rules={{ required: "Email is required" }}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <input
+                  {...field}
+                  placeholder="you@example.com"
+                  style={{
+                    width: "100%",
+                    padding: "0.65rem 0.75rem",
+                    borderRadius: "var(--elz-radius-sm)",
+                    border: "1px solid var(--elz-border)",
+                    fontFamily: "var(--elz-font)",
+                    background: "#fff",
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <button type="submit" className="elz-btn elz-btn--primary" style={{ width: "fit-content" }}>
+          Submit
+        </button>
+      </form>
+    </Form>
+  );
+}
+
+export function App() {
+  return (
+    <ElzProvider>
+      <ToastProvider position="top-right">
+        <TooltipProvider delayDuration={180}>
+          <main className="playground">
+            <header className="playground__brand">
+              <h1 className="playground__logo">Elz UI</h1>
+              <p className="playground__tag">
+                Precision overlays for product interfaces — dialogs, drawers, menus, and quiet feedback.
+              </p>
+            </header>
+
+            <section className="overlay-stage">
+              <h2 className="overlay-stage__title">Overlays</h2>
+              <div className="overlay-grid">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button type="button" className="elz-btn">
+                      Dialog
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Archive project?</DialogTitle>
+                      <DialogDescription>
+                        This hides the project from your dashboard. You can restore it anytime from archived
+                        projects.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <button type="button" className="elz-btn elz-btn--ghost">
+                          Cancel
+                        </button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <button type="button" className="elz-btn elz-btn--primary">
+                          Archive
+                        </button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                <Drawer>
+                  <DrawerTrigger asChild>
+                    <button type="button" className="elz-btn">
+                      Drawer
+                    </button>
+                  </DrawerTrigger>
+                  <DrawerContent side="right">
+                    <DrawerHeader>
+                      <DrawerTitle>Inspector</DrawerTitle>
+                      <DrawerDescription>
+                        Review details without leaving your current context.
+                      </DrawerDescription>
+                    </DrawerHeader>
+                    <div className="drawer-body">
+                      <ul className="drawer-list">
+                        <li>
+                          <strong>Status</strong>
+                          <span>Published</span>
+                        </li>
+                        <li>
+                          <strong>Owner</strong>
+                          <span>Design systems</span>
+                        </li>
+                        <li>
+                          <strong>Updated</strong>
+                          <span>2 hours ago</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <DrawerFooter>
+                      <DrawerClose asChild>
+                        <button type="button" className="elz-btn elz-btn--ghost">
+                          Close
+                        </button>
+                      </DrawerClose>
+                      <button type="button" className="elz-btn elz-btn--primary">
+                        Edit details
+                      </button>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button type="button" className="elz-btn">
+                      Popover
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <div className="popover-card">
+                      <h3>Quick share</h3>
+                      <p>Invite teammates with view or edit access. Links expire in 7 days.</p>
+                      <button type="button" className="elz-btn elz-btn--primary">
+                        Copy link
+                      </button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button type="button" className="elz-btn">
+                      Tooltip
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">Keyboard shortcut: ⌘K</TooltipContent>
+                </Tooltip>
+
+                <Menu>
+                  <MenuTrigger asChild>
+                    <button type="button" className="elz-btn">
+                      Menu
+                    </button>
+                  </MenuTrigger>
+                  <MenuContent align="start">
+                    <MenuLabel>Account</MenuLabel>
+                    <MenuItem>
+                      <span className="menu-icon">◎</span> Profile
+                    </MenuItem>
+                    <MenuItem>
+                      <span className="menu-icon">⚙</span> Settings
+                    </MenuItem>
+                    <MenuSeparator />
+                    <MenuItem>
+                      <span className="menu-icon">↗</span> Open docs
+                    </MenuItem>
+                    <MenuSeparator />
+                    <MenuItem style={{ color: "var(--elz-danger)" }}>
+                      <span className="menu-icon">⎋</span> Log out
+                    </MenuItem>
+                  </MenuContent>
+                </Menu>
+
+                <ToastDemo />
+              </div>
+            </section>
+
+            <section className="section">
+              <h2>Tabs</h2>
+              <Tabs defaultValue="one">
+                <TabsList>
+                  <TabsTrigger value="one">Overview</TabsTrigger>
+                  <TabsTrigger value="two">Activity</TabsTrigger>
+                </TabsList>
+                <TabsContent value="one">Project health looks stable this week.</TabsContent>
+                <TabsContent value="two">3 updates from your team in the last 24 hours.</TabsContent>
+              </Tabs>
+            </section>
+
+            <section className="section">
+              <h2>Accordion</h2>
+              <Accordion type="single" collapsible>
+                <AccordionItem value="a">
+                  <AccordionTrigger>What is Elz UI?</AccordionTrigger>
+                  <AccordionContent>A modular React component library under @elz-ui.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="b">
+                  <AccordionTrigger>How do I install?</AccordionTrigger>
+                  <AccordionContent>pnpm add @elz-ui/core @elz-ui/dialog</AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </section>
+
+            <section className="section">
+              <h2>Form</h2>
+              <FormDemo />
+            </section>
+          </main>
+        </TooltipProvider>
+      </ToastProvider>
+    </ElzProvider>
+  );
+}
