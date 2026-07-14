@@ -1,7 +1,8 @@
 {
   "name": "@elz-ui/accordion",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Accessible accordion for Elz UI",
+  "keywords": ["react", "accordion", "elz-ui", "accessible"],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -23,9 +24,6 @@
     "react": ">=18",
     "react-dom": ">=18",
     "@elz-ui/core": ">=0.1.0"
-  },
-  "dependencies": {
-    "@radix-ui/react-accordion": "^1.2.11"
   },
   "devDependencies": {
     "@elz-ui/core": "workspace:*",

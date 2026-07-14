@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ["react", "react-dom", "@elz-ui/core", "react-hook-form", /^@radix-ui\//],
+  external: ["react", "react-dom", "@elz-ui/core"],
 });

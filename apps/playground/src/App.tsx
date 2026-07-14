@@ -29,6 +29,56 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@e
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@elz-ui/form";
 import "./playground.css";
 
+const FAQ_ITEMS = [
+  {
+    value: "a",
+    title: "What is Elz UI?",
+    content: "A modular React component library under @elz-ui.",
+  },
+  {
+    value: "b",
+    title: "How do I install?",
+    content: "pnpm add @elz-ui/core @elz-ui/accordion",
+  },
+  {
+    value: "c",
+    title: "Is it accessible?",
+    content: "Yes — keyboard and ARIA are built in.",
+  },
+] as const;
+
+const AUTOCLOSE_ITEMS = [
+  {
+    value: "a",
+    title: "Only one open at a time",
+    content: "Opening another item closes this one.",
+  },
+  {
+    value: "b",
+    title: "Try opening me next",
+    content: "The previous panel closed automatically.",
+  },
+] as const;
+
+function AccordionList({
+  items,
+  autoclose,
+}: {
+  items: readonly { value: string; title: string; content: string }[];
+  autoclose?: boolean;
+}) {
+  return (
+    <Accordion autoclose={autoclose}>
+      {items.map((item) => (
+        <AccordionItem key={item.value} value={item.value}>
+          <AccordionTrigger>{item.title}</AccordionTrigger>
+          <AccordionContent>{item.content}</AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  );
+}
+
 function ToastDemo() {
   const { toast } = useToast();
   return (
@@ -244,16 +294,9 @@ export function App() {
 
             <section className="section">
               <h2>Accordion</h2>
-              <Accordion type="single" collapsible>
-                <AccordionItem value="a">
-                  <AccordionTrigger>What is Elz UI?</AccordionTrigger>
-                  <AccordionContent>A modular React component library under @elz-ui.</AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="b">
-                  <AccordionTrigger>How do I install?</AccordionTrigger>
-                  <AccordionContent>pnpm add @elz-ui/core @elz-ui/dialog</AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <AccordionList items={FAQ_ITEMS} />
+              <h2 style={{ marginTop: "1.25rem" }}>Accordion (autoclose)</h2>
+              <AccordionList items={AUTOCLOSE_ITEMS} autoclose />
             </section>
 
             <section className="section">
