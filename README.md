@@ -16,6 +16,8 @@ Accessible React component library. Install packages individually under the `@el
 | `@elz-ui/tabs` | Tabs |
 | `@elz-ui/accordion` | Accordion |
 | `@elz-ui/form` | Form field primitives |
+| `@elz-ui/input` | Accessible input fields with variants and validation |
+| `@elz-ui/button` | Interactive button component with variants and states |
 
 ## Development
 
