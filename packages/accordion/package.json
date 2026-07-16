@@ -1,6 +1,6 @@
 {
   "name": "@elz-ui/accordion",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Accessible accordion for Elz UI",
   "keywords": ["react", "accordion", "elz-ui", "accessible"],
   "type": "module",

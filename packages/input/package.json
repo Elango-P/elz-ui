@@ -1,21 +1,13 @@
 {
-  "name": "@elz-ui/core",
-  "version": "0.1.1",
-  "description": "Shared utilities and theming for Elz UI",
+  "name": "@elz-ui/input",
+  "version": "0.1.0",
+  "description": "Accessible and customizable input components for Elz UI",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/index.d.ts"
-      ]
-    }
-  },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
@@ -24,27 +16,30 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
-    },
-    "./styles.css": "./dist/styles.css"
+    }
   },
-  "files": ["dist"],
-  "sideEffects": ["**/*.css"],
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
   "scripts": {
-    "build": "tsup && cp src/styles.css dist/styles.css",
+    "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": ">=18",
-    "react-dom": ">=18"
-  },
-  "dependencies": {
-    "clsx": "^2.1.1"
+    "react-dom": ">=18",
+    "@elz-ui/core": ">=0.1.0"
   },
   "devDependencies": {
+    "@elz-ui/core": "workspace:*",
     "typescript": "^5.9.0",
     "tsup": "^8.5.0",
     "vitest": "^3.2.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/jest-dom": "^6.4.0",
+    "@testing-library/user-event": "^14.5.2",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",

@@ -62,30 +62,20 @@ function ChevronIcon() {
   );
 }
 
-type AccordionBaseProps = Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue"> & {
-  /** When true, opening one item closes the others. Default: false (each item toggles independently). */
+type AccordionProps = Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue"> & {
+  /**
+   * When true, opening one item closes the others.
+   * Can be combined with `type="multiple"` — `autoclose` wins at runtime.
+   * Default: false (each item toggles independently).
+   */
   autoclose?: boolean;
   collapsible?: boolean;
   type?: AccordionType;
-};
-
-type AccordionSingleProps = AccordionBaseProps & {
-  type?: "single";
-  autoclose?: true;
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-};
-
-type AccordionMultipleProps = AccordionBaseProps & {
-  type?: "multiple";
-  autoclose?: false;
   value?: string | string[];
   defaultValue?: string | string[];
-  onValueChange?: (value: string[]) => void;
+  /** Exclusive mode (`autoclose` / `type="single"`) passes a string; otherwise a string[]. */
+  onValueChange?: (value: string | string[]) => void;
 };
-
-type AccordionProps = AccordionSingleProps | AccordionMultipleProps;
 
 const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>((props, ref) => {
   const {
@@ -127,11 +117,7 @@ const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>((props, ref) 
       }
 
       if (onValueChange) {
-        if (exclusive) {
-          (onValueChange as (v: string) => void)(next[0] ?? "");
-        } else {
-          (onValueChange as (v: string[]) => void)(next);
-        }
+        onValueChange(exclusive ? (next[0] ?? "") : next);
       }
     },
     [exclusive, collapsible, value, isControlled, onValueChange],

@@ -102,6 +102,29 @@ describe("@elz-ui/accordion", () => {
     expect(second.getAttribute("aria-expanded")).toBe("false");
   });
 
+  it("closes other items when autoclose is true with type multiple", () => {
+    render(
+      <Accordion type="multiple" autoclose>
+        <AccordionItem value="a">
+          <AccordionTrigger>Multi Autoclose First</AccordionTrigger>
+          <AccordionContent>Content A</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="b">
+          <AccordionTrigger>Multi Autoclose Second</AccordionTrigger>
+          <AccordionContent>Content B</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+
+    const first = screen.getByRole("button", { name: /multi autoclose first/i });
+    const second = screen.getByRole("button", { name: /multi autoclose second/i });
+
+    fireEvent.click(first);
+    fireEvent.click(second);
+    expect(first.getAttribute("aria-expanded")).toBe("false");
+    expect(second.getAttribute("aria-expanded")).toBe("true");
+  });
+
   it("does not close the open item when autoclose and collapsible={false}", () => {
     render(
       <Accordion autoclose collapsible={false}>

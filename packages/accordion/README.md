@@ -48,9 +48,15 @@ const items = [
 
 ### Autoclose
 
+Opening one item closes the others. Works with `type="multiple"` as well — `autoclose` wins.
+
 ```tsx
 <Accordion autoclose>
   {/* opening one item closes the others */}
+</Accordion>
+
+<Accordion type="multiple" autoclose>
+  {/* same exclusive behavior */}
 </Accordion>
 ```
 
@@ -77,9 +83,9 @@ const items = [
 
 | Prop | Default | Description |
 |------|---------|-------------|
-| `autoclose` | `false` | When `true`, opening one item closes the others |
+| `autoclose` | `false` | When `true`, opening one item closes the others (overrides `type="multiple"`) |
 | `collapsible` | `true` | When exclusive, allow closing the open item by clicking it again |
-| `type` | `"multiple"` | `"single"` is exclusive (same as `autoclose`); `"multiple"` is independent |
+| `type` | `"multiple"` | `"single"` is exclusive; `"multiple"` is independent unless `autoclose` is set |
 | `className` / `style` | — | Apply all visual styling here (also on Item, Trigger, Content) |
 
 Controlled (`value` / `onValueChange`) or uncontrolled (`defaultValue`) supported. Use `data-state="open" | "closed"` in your CSS if needed.
