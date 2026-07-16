@@ -1,6 +1,5 @@
 {
   "name": "elz-ui",
-  "private": true,
   "version": "1.0.0",
   "description": "Elz UI — accessible React component library",
   "scripts": {
