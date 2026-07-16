@@ -15,7 +15,7 @@ export const InputError = React.forwardRef<HTMLParagraphElement, InputErrorProps
         ref={ref}
         id={`${id}-error`}
         role="alert"
-        className={cn("mt-1.5 text-sm text-red-500 dark:text-red-400 font-medium", className)}
+        className={cn("elz-input-error", className)}
         {...props}
       >
         {children}

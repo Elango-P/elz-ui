@@ -13,7 +13,7 @@ export const ClearButton = React.forwardRef<HTMLButtonElement, ClearButtonProps>
         type="button"
         onClick={onClear}
         className={cn(
-          "flex h-full items-center justify-center px-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 rounded-md transition-colors",
+          "elz-input-button elz-input-icon--right",
           className
         )}
         aria-label="Clear input"

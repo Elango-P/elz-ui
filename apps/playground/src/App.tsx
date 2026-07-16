@@ -27,6 +27,8 @@ import { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } fr
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@elz-ui/tabs";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@elz-ui/accordion";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@elz-ui/form";
+import { Input } from "@elz-ui/input";
+import { Button } from "@elz-ui/button";
 import "./playground.css";
 
 const FAQ_ITEMS = [
@@ -82,8 +84,8 @@ function AccordionList({
 function ToastDemo() {
   const { toast } = useToast();
   return (
-    <button
-      className="elz-btn elz-btn--primary"
+    <Button
+      color="primary"
       type="button"
       onClick={() =>
         toast({
@@ -93,7 +95,7 @@ function ToastDemo() {
       }
     >
       Show toast
-    </button>
+    </Button>
   );
 }
 
@@ -130,11 +132,60 @@ function FormDemo() {
             </FormItem>
           )}
         />
-        <button type="submit" className="elz-btn elz-btn--primary" style={{ width: "fit-content" }}>
+        <Button type="submit" color="primary" style={{ width: "fit-content" }}>
           Submit
-        </button>
+        </Button>
       </form>
     </Form>
+  );
+}
+
+function InputDemo() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "1rem", maxWidth: "400px" }}>
+      <Input label="Email" placeholder="Enter your email" />
+      <Input label="Password" type="password" placeholder="Enter password" />
+      <Input label="Username" placeholder="johndoe" prefix="@" />
+      <Input label="Search" type="search" placeholder="Search..." clearable />
+      <Input label="Invalid field" error="This field is required" defaultValue="Wrong value" />
+      <Input label="Disabled" disabled placeholder="Not allowed" />
+    </div>
+  );
+}
+
+function ButtonDemo() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+      <div>
+        <h3 style={{ fontSize: "0.875rem", marginBottom: "0.5rem", color: "var(--elz-muted-foreground)" }}>Variants</h3>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+          <Button variant="solid" color="primary">Solid</Button>
+          <Button variant="outlined" color="primary">Outlined</Button>
+          <Button variant="soft" color="primary">Soft</Button>
+          <Button variant="ghost" color="primary">Ghost</Button>
+          <Button variant="link" color="primary">Link</Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ fontSize: "0.875rem", marginBottom: "0.5rem", color: "var(--elz-muted-foreground)" }}>Colors</h3>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+          <Button color="default">Default</Button>
+          <Button color="primary">Primary</Button>
+          <Button color="danger">Danger</Button>
+          <Button color="danger" variant="soft">Danger Soft</Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ fontSize: "0.875rem", marginBottom: "0.5rem", color: "var(--elz-muted-foreground)" }}>States & Sizes</h3>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+          <Button isLoading color="primary">Loading...</Button>
+          <Button disabled>Disabled</Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -156,9 +207,9 @@ export function App() {
               <div className="overlay-grid">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <button type="button" className="elz-btn">
+                    <Button type="button">
                       Dialog
-                    </button>
+                    </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
@@ -170,14 +221,14 @@ export function App() {
                     </DialogHeader>
                     <DialogFooter>
                       <DialogClose asChild>
-                        <button type="button" className="elz-btn elz-btn--ghost">
+                        <Button type="button" variant="ghost">
                           Cancel
-                        </button>
+                        </Button>
                       </DialogClose>
                       <DialogClose asChild>
-                        <button type="button" className="elz-btn elz-btn--primary">
+                        <Button type="button" color="primary">
                           Archive
-                        </button>
+                        </Button>
                       </DialogClose>
                     </DialogFooter>
                   </DialogContent>
@@ -185,9 +236,9 @@ export function App() {
 
                 <Drawer>
                   <DrawerTrigger asChild>
-                    <button type="button" className="elz-btn">
+                    <Button type="button">
                       Drawer
-                    </button>
+                    </Button>
                   </DrawerTrigger>
                   <DrawerContent side="right">
                     <DrawerHeader>
@@ -214,48 +265,48 @@ export function App() {
                     </div>
                     <DrawerFooter>
                       <DrawerClose asChild>
-                        <button type="button" className="elz-btn elz-btn--ghost">
+                        <Button type="button" variant="ghost">
                           Close
-                        </button>
+                        </Button>
                       </DrawerClose>
-                      <button type="button" className="elz-btn elz-btn--primary">
+                      <Button type="button" color="primary">
                         Edit details
-                      </button>
+                      </Button>
                     </DrawerFooter>
                   </DrawerContent>
                 </Drawer>
 
                 <Popover>
                   <PopoverTrigger asChild>
-                    <button type="button" className="elz-btn">
+                    <Button type="button">
                       Popover
-                    </button>
+                    </Button>
                   </PopoverTrigger>
                   <PopoverContent>
                     <div className="popover-card">
                       <h3>Quick share</h3>
                       <p>Invite teammates with view or edit access. Links expire in 7 days.</p>
-                      <button type="button" className="elz-btn elz-btn--primary">
+                      <Button type="button" color="primary">
                         Copy link
-                      </button>
+                      </Button>
                     </div>
                   </PopoverContent>
                 </Popover>
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button type="button" className="elz-btn">
+                    <Button type="button">
                       Tooltip
-                    </button>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent side="top">Keyboard shortcut: ⌘K</TooltipContent>
                 </Tooltip>
 
                 <Menu>
                   <MenuTrigger asChild>
-                    <button type="button" className="elz-btn">
+                    <Button type="button">
                       Menu
-                    </button>
+                    </Button>
                   </MenuTrigger>
                   <MenuContent align="start">
                     <MenuLabel>Account</MenuLabel>
@@ -302,6 +353,16 @@ export function App() {
             <section className="section">
               <h2>Form</h2>
               <FormDemo />
+            </section>
+
+            <section className="section">
+              <h2>Input</h2>
+              <InputDemo />
+            </section>
+
+            <section className="section">
+              <h2>Button</h2>
+              <ButtonDemo />
             </section>
           </main>
         </TooltipProvider>

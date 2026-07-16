@@ -167,22 +167,22 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
           maxLength,
         }}
       >
-        <div className={cn("flex flex-col relative", fullWidth ? "w-full" : "w-auto", containerClassName)}>
+        <div className={cn("elz-input-container", fullWidth ? "elz-input-container--full-width" : "elz-input-container--auto-width", containerClassName)}>
           {!isFloating && label && (
             <InputLabel className={labelClassName}>{label}</InputLabel>
           )}
 
           <div
             className={cn(
-              "relative flex items-center w-full transition-shadow duration-200",
+              "elz-input-wrapper",
               inputVariants({ variant, size, radius, color, hasError: hasError ? "true" : "false" }),
-              readOnly && !disabled && "bg-gray-50 dark:bg-gray-800/50 cursor-text",
+              readOnly && !disabled && "elz-input--readonly",
               wrapperClassName
             )}
             onClick={() => innerRef.current?.focus()}
           >
-            {startContent && <div className="flex-shrink-0 pl-3">{startContent}</div>}
-            {leftIcon && <div className="flex-shrink-0 pl-3 text-gray-400">{leftIcon}</div>}
+            {startContent && <div className="elz-input-icon elz-input-icon--left">{startContent}</div>}
+            {leftIcon && <div className="elz-input-icon elz-input-icon--left">{leftIcon}</div>}
             {prefix && <InputPrefix>{prefix}</InputPrefix>}
 
             {isFloating && label && (
@@ -211,25 +211,24 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
                 ) || undefined
               }
               className={cn(
-                "flex-1 w-full h-full bg-transparent border-none outline-none ring-0 p-0 placeholder-gray-400 disabled:cursor-not-allowed peer text-gray-900 dark:text-gray-100",
-                !startContent && !leftIcon && !prefix && "pl-3", // Fallback padding
-                !endContent && !rightIcon && !suffix && !clearable && !copyable && type !== "password" && !loading && "pr-3",
-                isFloating && "placeholder-transparent",
+                "elz-input-field",
+                !startContent && !leftIcon && !prefix && "elz-input-field--no-left",
+                !endContent && !rightIcon && !suffix && !clearable && !copyable && type !== "password" && !loading && "elz-input-field--no-right",
                 inputClassName
               )}
               {...props}
             />
 
             {loading && (
-              <div className="flex-shrink-0 pr-3">
+              <div className="elz-input-icon elz-input-icon--right">
                 <svg
-                  className="animate-spin h-4 w-4 text-gray-400"
+                  style={{ animation: 'spin 1s linear infinite', height: '1rem', width: '1rem', color: '#a0aec0' }}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               </div>
             )}
@@ -247,12 +246,12 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
             )}
 
             {suffix && <InputSuffix>{suffix}</InputSuffix>}
-            {rightIcon && <div className="flex-shrink-0 pr-3 text-gray-400">{rightIcon}</div>}
-            {endContent && <div className="flex-shrink-0 pr-3">{endContent}</div>}
+            {rightIcon && <div className="elz-input-icon elz-input-icon--right">{rightIcon}</div>}
+            {endContent && <div className="elz-input-icon elz-input-icon--right">{endContent}</div>}
           </div>
 
-          <div className="flex justify-between mt-1.5 items-start">
-            <div className="flex flex-col gap-1">
+          <div className="elz-input-footer">
+            <div className="elz-input-messages">
               {(helperText || description) && (
                 <InputHelper className={helperClassName}>
                   {helperText || description}
@@ -260,10 +259,10 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
               )}
               {error && <InputError className={errorClassName}>{error}</InputError>}
               {success && (
-                <p className="text-sm text-green-500 font-medium">{success}</p>
+                <p className="elz-input-success">{success}</p>
               )}
               {warning && (
-                <p className="text-sm text-yellow-500 font-medium">{warning}</p>
+                <p className="elz-input-warning">{warning}</p>
               )}
             </div>
 

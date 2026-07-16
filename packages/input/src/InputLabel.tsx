@@ -16,12 +16,12 @@ export const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(
         ref={ref}
         htmlFor={id}
         className={cn(
-          "block text-sm font-medium text-gray-700 dark:text-gray-200 transition-all duration-200",
-          floating && "absolute left-3 top-2.5 origin-[0] -translate-y-4 scale-75 transform cursor-text bg-white dark:bg-gray-900 px-1 text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 dark:peer-focus:text-blue-500",
-          floating && (isFocused || hasValue) ? "text-blue-600 dark:text-blue-500 scale-75 -translate-y-4" : "",
-          hasError && "text-red-500 dark:text-red-400",
-          disabled && "opacity-50 cursor-not-allowed",
-          !floating && "mb-1.5",
+          "elz-input-label",
+          floating && "elz-input-label--floating",
+          floating && (isFocused || hasValue) && "elz-input-label--floating-active",
+          floating && !(isFocused || hasValue) && "elz-input-label--floating-inactive",
+          hasError && "elz-input-label--error",
+          disabled && "elz-input-label--disabled",
           className
         )}
         {...props}

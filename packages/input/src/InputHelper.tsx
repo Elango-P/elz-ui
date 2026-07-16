@@ -14,7 +14,7 @@ export const InputHelper = React.forwardRef<HTMLParagraphElement, InputHelperPro
       <p
         ref={ref}
         id={`${id}-helper`}
-        className={cn("mt-1.5 text-sm text-gray-500 dark:text-gray-400", className)}
+        className={cn("elz-input-helper", className)}
         {...props}
       >
         {children}

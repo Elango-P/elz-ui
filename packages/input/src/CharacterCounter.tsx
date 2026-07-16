@@ -17,12 +17,12 @@ export const CharacterCounter = React.forwardRef<HTMLSpanElement, CharacterCount
       <span
         ref={ref}
         className={cn(
-          "text-xs ml-auto transition-colors duration-200",
+          "elz-input-counter",
           isAtLimit
-            ? "text-red-500 font-medium"
+            ? "elz-input-counter--limit"
             : isNearLimit
-            ? "text-yellow-500"
-            : "text-gray-400",
+            ? "elz-input-counter--near"
+            : "",
           className
         )}
         {...props}

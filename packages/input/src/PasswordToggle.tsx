@@ -14,7 +14,7 @@ export const PasswordToggle = React.forwardRef<HTMLButtonElement, PasswordToggle
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex h-full items-center justify-center px-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 rounded-r-md transition-colors",
+          "elz-input-button elz-input-icon--right",
           className
         )}
         aria-label={isVisible ? "Hide password" : "Show password"}

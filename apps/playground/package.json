@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@elz-ui/accordion": "workspace:*",
+    "@elz-ui/button": "workspace:*",
     "@elz-ui/core": "workspace:*",
     "@elz-ui/dialog": "workspace:*",
     "@elz-ui/drawer": "workspace:*",

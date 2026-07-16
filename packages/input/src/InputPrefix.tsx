@@ -9,7 +9,7 @@ export const InputPrefix = React.forwardRef<HTMLDivElement, InputPrefixProps>(
       <div
         ref={ref}
         className={cn(
-          "flex items-center pl-3 pr-2 text-gray-500 dark:text-gray-400 select-none",
+          "elz-input-icon elz-input-icon--left",
           className
         )}
         {...props}

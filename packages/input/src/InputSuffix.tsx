@@ -9,7 +9,7 @@ export const InputSuffix = React.forwardRef<HTMLDivElement, InputSuffixProps>(
       <div
         ref={ref}
         className={cn(
-          "flex items-center pl-2 pr-3 text-gray-500 dark:text-gray-400 select-none",
+          "elz-input-icon elz-input-icon--right",
           className
         )}
         {...props}

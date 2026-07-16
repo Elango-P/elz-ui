@@ -80,53 +80,6 @@ body {
   gap: 0.75rem;
 }
 
-.elz-btn {
-  appearance: none;
-  font-family: var(--elz-font);
-  font-size: 0.9rem;
-  font-weight: 550;
-  border-radius: 999px;
-  border: 1px solid var(--elz-border);
-  background: #fff;
-  color: var(--elz-foreground);
-  padding: 0.7rem 1rem;
-  cursor: pointer;
-  transition: transform 160ms var(--elz-ease), box-shadow 160ms var(--elz-ease), border-color 160ms ease,
-    background 160ms ease, color 160ms ease;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 8px 18px rgba(18, 20, 26, 0.04);
-}
-
-.elz-btn:hover {
-  transform: translateY(-1px);
-  border-color: #c9d1de;
-  box-shadow: 0 10px 24px rgba(18, 20, 26, 0.08);
-}
-
-.elz-btn:active {
-  transform: translateY(0);
-}
-
-.elz-btn--primary {
-  background: var(--elz-accent);
-  border-color: var(--elz-accent);
-  color: var(--elz-accent-foreground);
-  box-shadow: 0 10px 24px rgba(26, 107, 92, 0.25);
-}
-
-.elz-btn--primary:hover {
-  background: #15584c;
-  border-color: #15584c;
-}
-
-.elz-btn--ghost {
-  background: transparent;
-}
-
-.elz-btn--danger {
-  background: #fff5f5;
-  border-color: #f0c9c9;
-  color: var(--elz-danger);
-}
 
 .dialog-actions,
 .drawer-body {
