@@ -56,6 +56,7 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
       required,
       maxLength,
       className,
+      style,
       containerClassName,
       labelClassName,
       helperClassName,
@@ -217,6 +218,7 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
                 inputClassName
               )}
               {...props}
+              style={style}
             />
 
             {loading && (

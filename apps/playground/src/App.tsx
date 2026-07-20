@@ -84,18 +84,20 @@ function AccordionList({
 function ToastDemo() {
   const { toast } = useToast();
   return (
-    <Button
-      color="primary"
-      type="button"
-      onClick={() =>
-        toast({
-          title: "Changes published",
-          description: "Your workspace settings were saved successfully.",
-        })
-      }
-    >
-      Show toast
-    </Button>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+      <Button color="primary" type="button" onClick={() => toast.success("Changes published")}>
+        Success
+      </Button>
+      <Button color="danger" type="button" onClick={() => toast.error("Save failed")}>
+        Error
+      </Button>
+      <Button variant="outlined" type="button" onClick={() => toast.warn("Review required")}>
+        Warn
+      </Button>
+      <Button variant="soft" type="button" onClick={() => toast.info("New update available")}>
+        Info
+      </Button>
+    </div>
   );
 }
 

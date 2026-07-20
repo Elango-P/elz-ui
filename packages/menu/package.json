@@ -1,6 +1,6 @@
 {
   "name": "@elz-ui/menu",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "Accessible dropdown menu for Elz UI",
   "type": "module",
   "main": "./dist/index.cjs",

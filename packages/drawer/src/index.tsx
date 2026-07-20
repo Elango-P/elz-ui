@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn, type Side } from "@elz-ui/core";
+import { cn, resolveSurfaceStyle, type Side } from "@elz-ui/core";
 
 const Drawer = DialogPrimitive.Root;
 const DrawerTrigger = DialogPrimitive.Trigger;
@@ -10,19 +10,13 @@ const DrawerPortal = DialogPrimitive.Portal;
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
     data-slot="drawer-overlay"
     className={cn(className)}
-    style={{
-      position: "fixed",
-      inset: 0,
-      zIndex: "var(--elz-z-overlay)" as unknown as number,
-      background: "var(--elz-overlay)",
-      ...props.style,
-    }}
     {...props}
+    style={resolveSurfaceStyle(className, style)}
   />
 ));
 DrawerOverlay.displayName = "DrawerOverlay";
@@ -31,44 +25,68 @@ type DrawerContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.
   side?: Side;
 };
 
-const sideStyles: Record<Side, React.CSSProperties> = {
-  right: { top: 0, right: 0, bottom: 0, width: "min(100%, 26rem)", height: "100%", borderLeft: "1px solid var(--elz-border)" },
-  left: { top: 0, left: 0, bottom: 0, width: "min(100%, 26rem)", height: "100%", borderRight: "1px solid var(--elz-border)" },
-  top: { top: 0, left: 0, right: 0, width: "100%", height: "min(100%, 22rem)", borderBottom: "1px solid var(--elz-border)" },
-  bottom: { bottom: 0, left: 0, right: 0, width: "100%", height: "min(100%, 22rem)", borderTop: "1px solid var(--elz-border)" },
-};
+function allowPortaledOverlayInteraction(event: {
+  preventDefault: () => void;
+  target: EventTarget | null;
+}) {
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+  if (
+    target.closest(".overlay-menu") ||
+    target.closest("[data-radix-popper-content-wrapper]") ||
+    target.closest("[data-slot='menu-content']") ||
+    target.closest("[data-slot='popover-content']") ||
+    target.closest("[data-slot='select-content']") ||
+    target.closest("[data-slot='tooltip-content']")
+  ) {
+    event.preventDefault();
+  }
+}
 
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DrawerContentProps
->(({ className, children, side = "right", ...props }, ref) => (
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      data-slot="drawer-content"
-      data-side={side}
-      className={cn(className)}
-      style={{
-        position: "fixed",
-        zIndex: "var(--elz-z-overlay)" as unknown as number,
-        background: "var(--elz-background)",
-        color: "var(--elz-foreground)",
-        boxShadow: "var(--elz-shadow)",
-        padding: "1.5rem",
-        fontFamily: "var(--elz-font)",
-        display: "flex",
-        flexDirection: "column",
-        outline: "none",
-        ...sideStyles[side],
-        ...props.style,
-      }}
-      {...props}
-    >
-      {children}
-    </DialogPrimitive.Content>
-  </DrawerPortal>
-));
+>(
+  (
+    {
+      className,
+      children,
+      side = "right",
+      style,
+      onPointerDownOutside,
+      onInteractOutside,
+      onFocusOutside,
+      ...props
+    },
+    ref,
+  ) => (
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        data-slot="drawer-content"
+        data-side={side}
+        className={cn(className)}
+        onPointerDownOutside={(event) => {
+          allowPortaledOverlayInteraction(event);
+          onPointerDownOutside?.(event);
+        }}
+        onInteractOutside={(event) => {
+          allowPortaledOverlayInteraction(event);
+          onInteractOutside?.(event);
+        }}
+        onFocusOutside={(event) => {
+          allowPortaledOverlayInteraction(event);
+          onFocusOutside?.(event);
+        }}
+        {...props}
+        style={resolveSurfaceStyle(className, style)}
+      >
+        {children}
+      </DialogPrimitive.Content>
+    </DrawerPortal>
+  ),
+);
 DrawerContent.displayName = "DrawerContent";
 
 function DrawerHeader({ className, style, ...props }: React.HTMLAttributes<HTMLDivElement>) {
@@ -76,8 +94,8 @@ function DrawerHeader({ className, style, ...props }: React.HTMLAttributes<HTMLD
     <div
       data-slot="drawer-header"
       className={cn(className)}
-      style={{ display: "flex", flexDirection: "column", gap: "0.4rem", marginBottom: "1.25rem", ...style }}
       {...props}
+      style={resolveSurfaceStyle(className, style)}
     />
   );
 }
@@ -87,16 +105,8 @@ function DrawerFooter({ className, style, ...props }: React.HTMLAttributes<HTMLD
     <div
       data-slot="drawer-footer"
       className={cn(className)}
-      style={{
-        marginTop: "auto",
-        display: "flex",
-        gap: "0.5rem",
-        justifyContent: "flex-end",
-        paddingTop: "1.25rem",
-        borderTop: "1px solid var(--elz-border)",
-        ...style,
-      }}
       {...props}
+      style={resolveSurfaceStyle(className, style)}
     />
   );
 }
@@ -104,20 +114,13 @@ function DrawerFooter({ className, style, ...props }: React.HTMLAttributes<HTMLD
 const DrawerTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
     data-slot="drawer-title"
     className={cn(className)}
-    style={{
-      margin: 0,
-      fontFamily: "var(--elz-font-display)",
-      fontSize: "1.35rem",
-      fontWeight: 560,
-      letterSpacing: "-0.02em",
-      ...props.style,
-    }}
     {...props}
+    style={resolveSurfaceStyle(className, style)}
   />
 ));
 DrawerTitle.displayName = "DrawerTitle";
@@ -125,13 +128,13 @@ DrawerTitle.displayName = "DrawerTitle";
 const DrawerDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
     data-slot="drawer-description"
     className={cn(className)}
-    style={{ margin: 0, color: "var(--elz-muted-foreground)", fontSize: "0.9375rem", lineHeight: 1.55, ...props.style }}
     {...props}
+    style={resolveSurfaceStyle(className, style)}
   />
 ));
 DrawerDescription.displayName = "DrawerDescription";

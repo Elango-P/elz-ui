@@ -1,6 +1,6 @@
 {
   "name": "@elz-ui/core",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Shared utilities and theming for Elz UI",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -27,8 +27,12 @@
     },
     "./styles.css": "./dist/styles.css"
   },
-  "files": ["dist"],
-  "sideEffects": ["**/*.css"],
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "build": "tsup && cp src/styles.css dist/styles.css",
     "test": "vitest run",

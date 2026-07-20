@@ -1,4 +1,5 @@
 export { cn } from "./cn";
+export { resolveSurfaceStyle } from "./resolve-surface-style";
 export { ElzProvider, type ElzProviderProps } from "./provider";
 export type { PolymorphicProps, Side } from "./types";
 export * from "./hooks/use-controllable-state";

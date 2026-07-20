@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import { cn } from "@elz-ui/core";
+import { cn, resolveSurfaceStyle } from "@elz-ui/core";
 
 export type ToastPosition =
   | "top-left"
@@ -10,16 +10,28 @@ export type ToastPosition =
   | "bottom-right"
   | "bottom-center";
 
+export type ToastVariant = "default" | "success" | "error" | "warn" | "info";
+
 type ToastData = {
   id: string;
   title?: string;
   description?: string;
   duration?: number;
+  variant?: ToastVariant;
+};
+
+type ToastInput = Omit<ToastData, "id">;
+
+type ToastFn = ((input: ToastInput) => string) & {
+  success: (title: string, input?: Omit<ToastInput, "title" | "variant">) => string;
+  error: (title: string, input?: Omit<ToastInput, "title" | "variant">) => string;
+  warn: (title: string, input?: Omit<ToastInput, "title" | "variant">) => string;
+  info: (title: string, input?: Omit<ToastInput, "title" | "variant">) => string;
 };
 
 type ToastContextValue = {
   toasts: ToastData[];
-  toast: (input: Omit<ToastData, "id">) => string;
+  toast: ToastFn;
   dismiss: (id: string) => void;
   position: ToastPosition;
 };
@@ -27,15 +39,6 @@ type ToastContextValue = {
 const ToastContext = React.createContext<ToastContextValue | null>(null);
 
 let toastCount = 0;
-
-const positionStyles: Record<ToastPosition, React.CSSProperties> = {
-  "top-left": { top: "1.25rem", left: "1.25rem", right: "auto", bottom: "auto" },
-  "top-right": { top: "1.25rem", right: "1.25rem", left: "auto", bottom: "auto" },
-  "top-center": { top: "1.25rem", left: "50%", right: "auto", bottom: "auto", transform: "translateX(-50%)" },
-  "bottom-left": { bottom: "1.25rem", left: "1.25rem", right: "auto", top: "auto" },
-  "bottom-right": { bottom: "1.25rem", right: "1.25rem", left: "auto", top: "auto" },
-  "bottom-center": { bottom: "1.25rem", left: "50%", right: "auto", top: "auto", transform: "translateX(-50%)" },
-};
 
 const swipeByPosition: Record<ToastPosition, "up" | "down" | "left" | "right"> = {
   "top-left": "left",
@@ -45,6 +48,19 @@ const swipeByPosition: Record<ToastPosition, "up" | "down" | "left" | "right"> =
   "bottom-right": "right",
   "bottom-center": "down",
 };
+
+function createToastId() {
+  return `elz-toast-${++toastCount}`;
+}
+
+function withToastHelpers(base: (input: ToastInput) => string): ToastFn {
+  const fn = base as ToastFn;
+  fn.success = (title, input) => base({ ...input, title, variant: "success" });
+  fn.error = (title, input) => base({ ...input, title, variant: "error" });
+  fn.warn = (title, input) => base({ ...input, title, variant: "warn" });
+  fn.info = (title, input) => base({ ...input, title, variant: "info" });
+  return fn;
+}
 
 type ToastProviderProps = React.ComponentPropsWithoutRef<typeof ToastPrimitive.Provider> & {
   duration?: number;
@@ -60,12 +76,13 @@ function ToastProvider({
 }: ToastProviderProps) {
   const [toasts, setToasts] = React.useState<ToastData[]>([]);
 
-  const toast = React.useCallback(
-    (input: Omit<ToastData, "id">) => {
-      const id = `elz-toast-${++toastCount}`;
-      setToasts((prev) => [...prev, { id, duration, ...input }]);
-      return id;
-    },
+  const toast = React.useMemo(
+    () =>
+      withToastHelpers((input: ToastInput) => {
+        const id = createToastId();
+        setToasts((prev) => [...prev, { id, duration, variant: "default", ...input }]);
+        return id;
+      }),
     [duration],
   );
 
@@ -94,17 +111,18 @@ function useToast() {
   return ctx;
 }
 
-function toast(input: Omit<ToastData, "id">) {
-  const detail = { ...input, id: `elz-toast-${++toastCount}` };
-  window.dispatchEvent(new CustomEvent("elz-toast", { detail }));
+const toast = withToastHelpers((input: ToastInput) => {
+  const detail: ToastData = { variant: "default", ...input, id: createToastId() };
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("elz-toast", { detail }));
+  }
   return detail.id;
-}
+});
 
-function Toaster({ className, ...props }: React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>) {
+function Toaster({ className, style, ...props }: React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>) {
   const ctx = React.useContext(ToastContext);
   const [external, setExternal] = React.useState<ToastData[]>([]);
   const position = ctx?.position ?? "bottom-right";
-  const isTop = position.startsWith("top");
 
   React.useEffect(() => {
     const handler = (e: Event) => {
@@ -119,90 +137,49 @@ function Toaster({ className, ...props }: React.ComponentPropsWithoutRef<typeof 
 
   return (
     <>
-      {items.map((item) => (
-        <ToastPrimitive.Root
-          key={item.id}
-          duration={item.duration}
-          data-slot="toast"
-          data-position={position}
-          open
-          onOpenChange={(open) => {
-            if (!open) {
-              ctx?.dismiss(item.id);
-              setExternal((prev) => prev.filter((t) => t.id !== item.id));
-            }
-          }}
-          style={{
-            background: "var(--elz-background)",
-            color: "var(--elz-foreground)",
-            border: "1px solid var(--elz-border)",
-            borderRadius: "var(--elz-radius)",
-            boxShadow: "var(--elz-shadow)",
-            padding: "0.9rem 1rem",
-            fontFamily: "var(--elz-font)",
-            display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "0.35rem 0.75rem",
-            alignItems: "start",
-            borderLeft: "3px solid var(--elz-accent)",
-          }}
-        >
-          <div style={{ display: "grid", gap: "0.2rem" }}>
-            {item.title ? (
-              <ToastPrimitive.Title
-                data-slot="toast-title"
-                style={{ fontWeight: 600, fontSize: "0.875rem", letterSpacing: "-0.01em" }}
-              >
-                {item.title}
-              </ToastPrimitive.Title>
-            ) : null}
-            {item.description ? (
-              <ToastPrimitive.Description
-                data-slot="toast-description"
-                style={{ fontSize: "0.8125rem", color: "var(--elz-muted-foreground)", lineHeight: 1.45 }}
-              >
-                {item.description}
-              </ToastPrimitive.Description>
-            ) : null}
-          </div>
-          <ToastPrimitive.Close
-            aria-label="Close"
-            data-slot="toast-close"
-            style={{
-              border: "none",
-              background: "transparent",
-              color: "var(--elz-muted-foreground)",
-              cursor: "pointer",
-              fontSize: "1.1rem",
-              lineHeight: 1,
-              padding: "0.1rem",
-              borderRadius: "0.35rem",
+      {items.map((item) => {
+        const variant = item.variant ?? "default";
+        return (
+          <ToastPrimitive.Root
+            key={item.id}
+            duration={item.duration}
+            data-slot="toast"
+            data-position={position}
+            data-variant={variant}
+            open
+            onOpenChange={(open) => {
+              if (!open) {
+                ctx?.dismiss(item.id);
+                setExternal((prev) => prev.filter((t) => t.id !== item.id));
+              }
             }}
           >
-            ×
-          </ToastPrimitive.Close>
-        </ToastPrimitive.Root>
-      ))}
+            <div data-slot="toast-body">
+              {item.title ? (
+                <ToastPrimitive.Title data-slot="toast-title">{item.title}</ToastPrimitive.Title>
+              ) : null}
+              {item.description ? (
+                <ToastPrimitive.Description data-slot="toast-description">
+                  {item.description}
+                </ToastPrimitive.Description>
+              ) : null}
+            </div>
+            <ToastPrimitive.Close aria-label="Close" data-slot="toast-close">
+              ×
+            </ToastPrimitive.Close>
+          </ToastPrimitive.Root>
+        );
+      })}
       <ToastPrimitive.Viewport
         data-slot="toast-viewport"
         data-position={position}
         className={cn(className)}
-        style={{
-          position: "fixed",
-          zIndex: "var(--elz-z-toast)" as unknown as number,
-          display: "flex",
-          flexDirection: isTop ? "column-reverse" : "column",
-          gap: "0.65rem",
-          width: "min(100vw - 2rem, 22rem)",
-          outline: "none",
-          ...positionStyles[position],
-          ...props.style,
-        }}
         {...props}
+        style={resolveSurfaceStyle(className, style)}
       />
     </>
   );
 }
 
 export { ToastProvider, useToast, toast, Toaster };
-export type { ToastProviderProps };
+export type { ToastProviderProps, ToastInput, ToastData };

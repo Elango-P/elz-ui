@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn } from "@elz-ui/core";
+import { cn, resolveSurfaceStyle } from "@elz-ui/core";
 
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
@@ -10,64 +10,85 @@ const DialogClose = DialogPrimitive.Close;
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
     data-slot="dialog-overlay"
     className={cn(className)}
-    style={{
-      position: "fixed",
-      inset: 0,
-      zIndex: "var(--elz-z-overlay)" as unknown as number,
-      background: "var(--elz-overlay)",
-      ...props.style,
-    }}
     {...props}
+    style={resolveSurfaceStyle(className, style)}
   />
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
+function allowPortaledOverlayInteraction(event: {
+  preventDefault: () => void;
+  target: EventTarget | null;
+}) {
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+  if (
+    target.closest(".overlay-menu") ||
+    target.closest("[data-radix-popper-content-wrapper]") ||
+    target.closest("[data-slot='menu-content']") ||
+    target.closest("[data-slot='popover-content']") ||
+    target.closest("[data-slot='select-content']") ||
+    target.closest("[data-slot='tooltip-content']")
+  ) {
+    event.preventDefault();
+  }
+}
+
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      data-slot="dialog-content"
-      className={cn(className)}
-      style={{
-        position: "fixed",
-        left: "50%",
-        top: "50%",
-        zIndex: "var(--elz-z-overlay)" as unknown as number,
-        transform: "translate(-50%, -50%)",
-        background: "var(--elz-background)",
-        color: "var(--elz-foreground)",
-        borderRadius: "calc(var(--elz-radius) + 0.15rem)",
-        boxShadow: "var(--elz-shadow)",
-        border: "1px solid var(--elz-border)",
-        padding: "1.5rem",
-        width: "min(100% - 2rem, 26rem)",
-        fontFamily: "var(--elz-font)",
-        outline: "none",
-        ...props.style,
-      }}
-      {...props}
-    >
-      {children}
-    </DialogPrimitive.Content>
-  </DialogPortal>
-));
+>(
+  (
+    {
+      className,
+      children,
+      style,
+      onPointerDownOutside,
+      onInteractOutside,
+      onFocusOutside,
+      ...props
+    },
+    ref,
+  ) => (
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        data-slot="dialog-content"
+        className={cn(className)}
+        onPointerDownOutside={(event) => {
+          allowPortaledOverlayInteraction(event);
+          onPointerDownOutside?.(event);
+        }}
+        onInteractOutside={(event) => {
+          allowPortaledOverlayInteraction(event);
+          onInteractOutside?.(event);
+        }}
+        onFocusOutside={(event) => {
+          allowPortaledOverlayInteraction(event);
+          onFocusOutside?.(event);
+        }}
+        {...props}
+        style={resolveSurfaceStyle(className, style)}
+      >
+        {children}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  ),
+);
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, style, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     data-slot="dialog-header"
     className={cn(className)}
-    style={{ display: "flex", flexDirection: "column", gap: "0.4rem", marginBottom: "1.25rem", ...style }}
     {...props}
+    style={resolveSurfaceStyle(className, style)}
   />
 );
 
@@ -75,35 +96,21 @@ const DialogFooter = ({ className, style, ...props }: React.HTMLAttributes<HTMLD
   <div
     data-slot="dialog-footer"
     className={cn(className)}
-    style={{
-      display: "flex",
-      gap: "0.5rem",
-      justifyContent: "flex-end",
-      marginTop: "1.5rem",
-      ...style,
-    }}
     {...props}
+    style={resolveSurfaceStyle(className, style)}
   />
 );
 
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
     data-slot="dialog-title"
     className={cn(className)}
-    style={{
-      margin: 0,
-      fontFamily: "var(--elz-font-display)",
-      fontSize: "1.35rem",
-      fontWeight: 560,
-      letterSpacing: "-0.02em",
-      lineHeight: 1.25,
-      ...props.style,
-    }}
     {...props}
+    style={resolveSurfaceStyle(className, style)}
   />
 ));
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
@@ -111,19 +118,13 @@ DialogTitle.displayName = DialogPrimitive.Title.displayName;
 const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
     data-slot="dialog-description"
     className={cn(className)}
-    style={{
-      margin: 0,
-      color: "var(--elz-muted-foreground)",
-      fontSize: "0.9375rem",
-      lineHeight: 1.55,
-      ...props.style,
-    }}
     {...props}
+    style={resolveSurfaceStyle(className, style)}
   />
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;

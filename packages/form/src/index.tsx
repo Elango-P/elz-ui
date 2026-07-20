@@ -9,7 +9,7 @@ import {
   type FieldPath,
   type FieldValues,
 } from "react-hook-form";
-import { cn } from "@elz-ui/core";
+import { cn, resolveSurfaceStyle } from "@elz-ui/core";
 
 const Form = FormProvider;
 
@@ -37,8 +37,8 @@ function FormItem({ className, style, ...props }: React.HTMLAttributes<HTMLDivEl
       <div
         data-slot="form-item"
         className={cn(className)}
-        style={{ display: "grid", gap: "0.35rem", fontFamily: "var(--elz-font)", ...style }}
         {...props}
+        style={resolveSurfaceStyle(className, style)}
       />
     </FormItemContext.Provider>
   );
@@ -64,21 +64,17 @@ function useFormField() {
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
+>(({ className, style, ...props }, ref) => {
   const { error, formItemId } = useFormField();
   return (
     <LabelPrimitive.Root
       ref={ref}
       data-slot="form-label"
+      data-invalid={error ? "true" : undefined}
       className={cn(className)}
       htmlFor={formItemId}
-      style={{
-        fontSize: "0.875rem",
-        fontWeight: 500,
-        color: error ? "#dc2626" : "var(--elz-foreground)",
-        ...props.style,
-      }}
       {...props}
+      style={resolveSurfaceStyle(className, style)}
     />
   );
 });
@@ -103,7 +99,7 @@ const FormControl = React.forwardRef<
 FormControl.displayName = "FormControl";
 
 const FormDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, ...props }, ref) => {
+  ({ className, style, ...props }, ref) => {
     const { formDescriptionId } = useFormField();
     return (
       <p
@@ -111,8 +107,8 @@ const FormDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
         id={formDescriptionId}
         data-slot="form-description"
         className={cn(className)}
-        style={{ margin: 0, fontSize: "0.75rem", color: "var(--elz-muted-foreground)", ...props.style }}
         {...props}
+        style={resolveSurfaceStyle(className, style)}
       />
     );
   },
@@ -120,7 +116,7 @@ const FormDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
 FormDescription.displayName = "FormDescription";
 
 const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, children, style, ...props }, ref) => {
     const { error, formMessageId } = useFormField();
     const body = error ? String(error.message ?? "") : children;
     if (!body) return null;
@@ -130,8 +126,8 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
         id={formMessageId}
         data-slot="form-message"
         className={cn(className)}
-        style={{ margin: 0, fontSize: "0.75rem", color: "#dc2626", ...props.style }}
         {...props}
+        style={resolveSurfaceStyle(className, style)}
       >
         {body}
       </p>

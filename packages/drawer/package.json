@@ -1,6 +1,6 @@
 {
   "name": "@elz-ui/drawer",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Accessible slide-over drawer for Elz UI",
   "type": "module",
   "main": "./dist/index.cjs",
