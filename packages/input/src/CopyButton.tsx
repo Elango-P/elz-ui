@@ -9,7 +9,8 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
   ({ className, valueToCopy, ...props }, ref) => {
     const [copied, setCopied] = React.useState(false);
 
-    const handleCopy = React.useCallback(() => {
+    const handleCopy = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
       if (!valueToCopy) return;
       navigator.clipboard.writeText(valueToCopy).then(() => {
         setCopied(true);

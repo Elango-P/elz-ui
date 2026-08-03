@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cn } from "@elz-ui/core";
 import { buttonVariants } from "./styles";
 import type { ButtonProps } from "./types";
@@ -39,19 +39,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className
     );
 
-    if (asChild) {
-      return (
-        <Slot className={buttonClass} ref={ref} {...props} style={style}>
-          {children}
-        </Slot>
-      );
-    }
+    const Comp = asChild ? Slot : "button";
 
     return (
-      <button
+      <Comp
         ref={ref}
         className={buttonClass}
         disabled={disabled || isLoading}
+        aria-busy={isLoading ? "true" : undefined}
         {...props}
         style={style}
       >
@@ -77,12 +72,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <span className="elz-btn__icon elz-btn__icon--left">{leftIcon}</span>
         )}
 
-        {children && <span className="elz-btn__content">{children}</span>}
+        <Slottable>
+          {asChild ? children : children ? <span className="elz-btn__content">{children}</span> : null}
+        </Slottable>
 
         {!isLoading && rightIcon && (
           <span className="elz-btn__icon elz-btn__icon--right">{rightIcon}</span>
         )}
-      </button>
+      </Comp>
     );
   }
 );

@@ -28,12 +28,12 @@ function allowPortaledOverlayInteraction(event: {
   const target = event.target;
   if (!(target instanceof Element)) return;
   if (
-    target.closest(".overlay-menu") ||
+    target.closest('[role="dialog"]') ||
+    target.closest('[role="menu"]') ||
+    target.closest('[role="listbox"]') ||
+    target.closest('[role="tooltip"]') ||
     target.closest("[data-radix-popper-content-wrapper]") ||
-    target.closest("[data-slot='menu-content']") ||
-    target.closest("[data-slot='popover-content']") ||
-    target.closest("[data-slot='select-content']") ||
-    target.closest("[data-slot='tooltip-content']")
+    target.closest("[data-slot$='-content']")
   ) {
     event.preventDefault();
   }
@@ -83,8 +83,8 @@ const DialogContent = React.forwardRef<
 );
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-const DialogHeader = ({ className, style, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
+const DialogHeader = ({ className, style, ...props }: React.HTMLAttributes<HTMLElement>) => (
+  <header
     data-slot="dialog-header"
     className={cn(className)}
     {...props}
@@ -92,8 +92,8 @@ const DialogHeader = ({ className, style, ...props }: React.HTMLAttributes<HTMLD
   />
 );
 
-const DialogFooter = ({ className, style, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
+const DialogFooter = ({ className, style, ...props }: React.HTMLAttributes<HTMLElement>) => (
+  <footer
     data-slot="dialog-footer"
     className={cn(className)}
     {...props}

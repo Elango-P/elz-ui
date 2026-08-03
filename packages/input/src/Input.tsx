@@ -101,7 +101,8 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
       onClear?.();
       // Dispatch event for standard onChange handlers
       if (innerRef.current) {
-        innerRef.current.value = "";
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set;
+        nativeInputValueSetter?.call(innerRef.current, "");
         const event = new Event("input", { bubbles: true });
         innerRef.current.dispatchEvent(event);
         const changeEvent = new Event("change", { bubbles: true });
@@ -152,6 +153,7 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
 
     const actualType = type === "password" ? (isPasswordVisible ? "text" : "password") : type;
     const hasError = !!error || props["aria-invalid"] === true;
+    const hasWarning = !!warning;
     const isFloating = floatingLabel && !!label;
 
     return (
@@ -204,11 +206,13 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
               readOnly={readOnly}
               required={required}
               maxLength={maxLength}
-              aria-invalid={hasError}
+              aria-invalid={hasError || hasWarning}
               aria-describedby={
                 cn(
                   error ? `${id}-error` : "",
-                  helperText || description ? `${id}-helper` : ""
+                  helperText || description ? `${id}-helper` : "",
+                  warning ? `${id}-warning` : "",
+                  success ? `${id}-success` : ""
                 ) || undefined
               }
               className={cn(
@@ -261,10 +265,10 @@ export const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
               )}
               {error && <InputError className={errorClassName}>{error}</InputError>}
               {success && (
-                <p className="elz-input-success">{success}</p>
+                <p id={`${id}-success`} className="elz-input-success">{success}</p>
               )}
               {warning && (
-                <p className="elz-input-warning">{warning}</p>
+                <p id={`${id}-warning`} className="elz-input-warning">{warning}</p>
               )}
             </div>
 

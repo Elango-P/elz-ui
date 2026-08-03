@@ -11,7 +11,10 @@ export const ClearButton = React.forwardRef<HTMLButtonElement, ClearButtonProps>
       <button
         ref={ref}
         type="button"
-        onClick={onClear}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClear();
+        }}
         className={cn(
           "elz-input-button elz-input-icon--right",
           className

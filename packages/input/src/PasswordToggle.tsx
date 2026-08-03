@@ -12,7 +12,10 @@ export const PasswordToggle = React.forwardRef<HTMLButtonElement, PasswordToggle
       <button
         ref={ref}
         type="button"
-        onClick={onToggle}
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggle();
+        }}
         className={cn(
           "elz-input-button elz-input-icon--right",
           className
